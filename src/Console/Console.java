@@ -42,13 +42,14 @@ private Aplikasi model;
     
     public void menuMahasiswa(){
         int pil = 0;
-       do{
+        do{
            try{
                System.out.println("=================================Menu Mahasiswa======================");
                System.out.println("> 1.Daftar Mahasiswa");
                System.out.println("> 2.Hapus Mahasiswa");
                System.out.println("> 3.Lihat Semua Daftar Mahasiswa");
-               System.out.println("> 4.Cari Mahasiswa ");
+               System.out.println("> 4.Cari Mahasiswa by id");
+               System.out.println("> 5.Cari Mahasiswa by index");
                System.out.println("> 0.Kembali");
                System.out.println("====================================================================");
                System.out.println("> Pilih menu :");
@@ -56,14 +57,14 @@ private Aplikasi model;
                switch (pil){
                    case 1 :
                        System.out.println("--- Daftar Mahasiswa ---");
-                       System.out.println("> Nama           :"); String nama = cinStr.nextLine();
+                       System.out.println("> Nama           :"); String Nama = cinStr.nextLine();
                        System.out.println("> NIM            :"); String NIM  = cinStr.nextLine();
                        System.out.println("> Email          :"); String Email = cinStr.nextLine();
                        System.out.println("> Telepon        :"); String Telepon = cinStr.nextLine();
                        System.out.println("> TglLahir       :"); String tglLahir= cinStr.nextLine();
                        System.out.println("> Alamat         :"); String Alamat  = cinStr.nextLine();
                        System.out.println("> Jurusan        :"); String Jurusan = cinStr.nextLine();
-                       model.createMahasiswa(nama, NIM, Email, Telepon, tglLahir, Alamat, Jurusan);
+                       model.createMahasiswa(Nama,NIM,Email,Telepon,tglLahir,Alamat,Jurusan);
                        break;
                        
                    case 2:
@@ -81,13 +82,20 @@ private Aplikasi model;
                        Mahasiswa e = model.getMahasiswa(id);
                        System.out.println(e);
                        break;
+                   case 5 :
+                        System.out.println("--- Cari Mahasiswa by Index ---");
+                        System.out.print(" - Masukkan index pelanggan : "); int index = inputInteger();
+                        e = model.getMahasiswa(index);
+                        System.out.println(e);
+                        break;
+                       
                    case 0 :
                        break;
                        
                }   
                                
                } catch (Exception e) {
-                   System.out.println("maaf sedang error: "+e.getMessage());
+                   System.out.println("Error  "+e.getMessage());
                }finally{
                 cinInt = new Scanner(System.in);
                 cinStr = new Scanner(System.in);
@@ -106,6 +114,7 @@ private Aplikasi model;
                 System.out.println("> 2. Hapus Data Pembimbing");
                 System.out.println("> 3. Lihat Semua Data");
                 System.out.println("> 4. Cari Pembimbing by id");
+                System.out.println("> 5. Cari pembimbing by index");
                 System.out.println("> 0. Exit");
                 System.out.println("=======================");
                 System.out.println("> Pilih menu :");
@@ -119,8 +128,8 @@ private Aplikasi model;
                         System.out.println("- Email     :");String Email = cinStr.nextLine();
                         System.out.println("- Telepon   :");String Telepon = cinStr.nextLine();
                         System.out.println("- TglLahir  :");String tglLahir = cinStr.nextLine();
-                        System.out.println("- Jurusan   :");String Jurusan  = cinStr.nextLine();
-                        model.createPembimbing(nama, Alamat, Email, Telepon, tglLahir, NIM, Jurusan);
+                  //      System.out.println("- Jurusan   :");String Jurusan  = cinStr.nextLine();
+                        model.createPembimbing(nama, Alamat, Email, Telepon, tglLahir, NIM, nama, Telepon);
                         break;
                     case 2:
                         System.out.println("---Hapus Data Pembimbing");
@@ -138,6 +147,12 @@ private Aplikasi model;
                         Pembimbing e = model.getPembimbing(id);
                         System.out.println(e);
                         break;
+                    case 5 :
+                        System.out.println("--- Cari Pembimbing by Index ---");
+                        System.out.print(" - Masukkan index pembimbing : "); int index = inputInteger();
+                        e = model.getPembimbing(index);
+                        System.out.println(e);
+                        break;    
                     case 0:
                         break;
                 }
@@ -179,12 +194,12 @@ private Aplikasi model;
                             System.out.println("---DataKelompok----");
                             model.viewListConsole(model.getListKelompok());
                             break;
-                         case 4 :
-                            System.out.println("---Cari Kelompok---");
+                        case 4 :
+                            System.out.println("---Cari Kelompok by Id---");
                             System.out.println("- Masukan id  :"); id = cinStr.nextLine();
                             Kelompok e = model.getKelompok(id);
                             System.out.println(e);
-                            break;
+                            break;   
                         case 0:
                             break;
                             
@@ -208,7 +223,8 @@ private Aplikasi model;
                 System.out.println("> 2.Nama Kelompok Lokasi");
                 System.out.println("> 3.Data Lokasi");
                 System.out.println("> 4.Hapus Data Lokasi");
-                System.out.println("> 5.Cari Lokasi");
+                System.out.println("> 5.Cari Lokasi by id");
+                System.out.println("> 6.Cari Lokasi by index");
                 System.out.println("> 0.Kembali");
                 System.out.println("===========================");
                 System.out.println("> Pilih menu  :");
@@ -234,11 +250,17 @@ private Aplikasi model;
                         model.removeLokasi(id);
                         break;
                     case 5 :
-                        System.out.println("----Cari Lokasi----");
+                        System.out.println("----Cari Lokasi by id----");
                         System.out.println("- Masukan id  :"); id = cinStr.nextLine();
                         Lokasi e = model.getLokasi(id);
                         System.out.println(e);
                         break;
+                    case 6 :
+                        System.out.println("--- Cari Lokasi by Index ---");
+                        System.out.print(" - Masukkan index Lokasi : "); int index = inputInteger();
+                        e = model.getLokasi(index);
+                        System.out.println(e);
+                        break;      
                     case 0 :
                         break;                                              
                     
@@ -336,8 +358,10 @@ private Aplikasi model;
         do {            
             try {
                 System.out.println("------ Menu Utama -------");
-                System.out.println("- 1. Mahasiswa    ");
-                System.out.println("- 2. Admin    ");
+                System.out.println("- 1. Register Mahasiswa    ");
+                System.out.println("- 2. Login Mahasiswa    ");
+                System.out.println("- 3. Register Admin");
+                System.out.println("- 4. Login Admin");
         //      System.out.println("- 3. Kelompok");
         //      System.out.println("- 4. Lokasi");
                 System.out.println("- 0. Exit                ");
@@ -346,10 +370,55 @@ private Aplikasi model;
                 pil = inputInteger();
                 switch (pil){
                     case 1:
-                        menuMahasiswa();
+                        System.out.println("---Register Mahasiswa----");
+                        System.out.println("Nama        :");String Nama = cinStr.nextLine();
+                        System.out.println("NIM         :");String NIM = cinStr.nextLine();
+                        System.out.println("Email       :");String Email = cinStr.nextLine();
+                        System.out.println("Telepon     :");String Telepon = cinStr.nextLine();
+                        System.out.println("tglLahir    :");String tglLahir = cinStr.nextLine();
+                        System.out.println("Alamat      :");String Alamat  = cinStr.nextLine();
+                        System.out.println("Jurusan     :");String Jurusan = cinStr.nextLine();
+                        System.out.println("username    :");String Username = cinStr.nextLine();
+                        System.out.println("password    :");String Password = cinStr.nextLine();
+                        model.createMahasiswa(NIM, Nama, Alamat, Email, Telepon, tglLahir, Jurusan, Username, Password);
                         break;
                     case 2:
-                        menuAdmin();
+                        System.out.println("--Login Mahasiswa--");
+                        System.out.println("Username    :"); Username = cinStr.nextLine();
+                        System.out.println("Password    :"); Password = cinStr.nextLine();
+                        String cek = model.loginMahasiswa(Username, Password);
+                        if(cek == "1") {
+                            System.out.println("Login success");
+                            menuMahasiswa();
+                        } else {
+                            System.out.println("Login failed. Username or Password doesn't match !");
+                        }
+                        break;
+                        
+                    case 3:
+                        System.out.println("---Register Admin----");
+                        System.out.println("Nama                   :");String Nama1 = cinStr.nextLine();
+                        System.out.println("NIP                    :");String NIP = cinStr.nextLine();
+                        System.out.println("Email                  :");String Email1 = cinStr.nextLine();
+                        System.out.println("Alamat                 :");String Alamat1 = cinStr.nextLine();
+                        System.out.println("Telepon                :");String Telepon1 = cinStr.nextLine();
+                        System.out.println("tglLahir               :");String tglLahir1 = cinStr.nextLine();
+                    //  System.out.println("Pembimbing Jurusan     :");String Jurusan1 = cinStr.nextLine();
+                        System.out.println("Username               :");String username = cinStr.nextLine();
+                        System.out.println("Password               :");String password = cinStr.nextLine();
+                        model.createPembimbing(Nama1, Alamat1, Email1, Telepon1, tglLahir1, NIP, username, password);
+                        break;
+                    case 4:
+                        System.out.println("---Login Admin---");
+                        System.out.println("Username    :");String usernamePmb = cinStr.nextLine();
+                        System.out.println("Password    :");String PasswordPmb = cinStr.nextLine();
+                        String cekPmb = model.loginAdmin(usernamePmb, PasswordPmb);
+                        if(cekPmb == "1") {
+                            System.out.println("Login success");
+                            menuAdmin();
+                        } else {
+                            System.out.println("Login failed. Username or Password doesn't match !");
+                        }
                         break;
                     case 0:
                         System.out.println("Terimakasih");

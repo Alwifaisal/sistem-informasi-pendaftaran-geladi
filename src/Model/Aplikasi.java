@@ -1,4 +1,10 @@
 package Model;
+
+import Database.Database;
+import java.io.IOException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.EOFException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +17,7 @@ public class Aplikasi {
     private ArrayList<Pembimbing> daftarPembimbing;
     private ArrayList<Kelompok> daftarKelompok;
     private ArrayList<Lokasi> daftarLokasi;
-    
+    private Database save;
     
     //Method utama
     public Aplikasi(){
@@ -20,6 +26,7 @@ public class Aplikasi {
     daftarLokasi = new ArrayList();
     daftarMahasiswa = new ArrayList();
     daftarPembimbing = new ArrayList();
+                 save = new Database();
     
      }
     
@@ -27,9 +34,15 @@ public class Aplikasi {
 
 //method mahasiswa
 
-public void createMahasiswa (String Nama, String NIM, String Email, String Telepon,String tglLahir ,String Alamat,String Jurusan){
-    daftarMahasiswa.add(new Mahasiswa(Nama,NIM,Email,Telepon,tglLahir,Alamat,Jurusan));
-    
+public void createMahasiswa (String NIM, String Nama, String Alamat, String Email, String Telepon, String tglLahir, String Jurusan, String Username, String Password){
+    daftarMahasiswa.add(new Mahasiswa(NIM, Nama, Alamat, Email, Telepon, tglLahir, Jurusan, Username, Password));
+}
+
+public Mahasiswa getUsernameMhs(String usernamel){
+    System.out.println("cek 1");
+    return daftarMahasiswa.stream()
+            .filter(e -> e.getUsername().equals(usernamel))
+            .findFirst().orElse(null);
 }
 
 public Mahasiswa getMahasiswa(String id){
@@ -53,8 +66,15 @@ public void removeMahasiswa (String id){
 
 //method pembimbing
 
-public void createPembimbing (String Nama, String Alamat, String Email, String Telepon, String tglLahir, String NIP, String Jurusan){
-    daftarPembimbing.add( new Pembimbing (Nama,Alamat,Email,Telepon,tglLahir,NIP,Jurusan));
+public void createPembimbing (String Nama, String Alamat, String Email, String Telepon, String tglLahir, String NIP,String Username,String Password){
+    daftarPembimbing.add( new Pembimbing (Nama,Alamat,Email,Telepon,tglLahir,NIP,Username,Password));
+}
+
+public Pembimbing getUsernamePmb(String usernamel){
+    System.out.println("cek 1");
+    return daftarPembimbing.stream()
+            .filter(e -> e.getUsername().equals(usernamel))
+            .findFirst().orElse(null);
 }
 
 public Pembimbing getPembimbing(String id ){
@@ -77,6 +97,14 @@ public void removePembimbing (String id){
     }
     
 }
+
+//komposisi
+public void addLokasi(String pembimbing,String Kelompok){
+    Lokasi cust = new Lokasi(pembimbing,Kelompok);
+    daftarLokasi.add(cust);
+}
+
+
 
 //method Kelompok
 
@@ -298,6 +326,31 @@ public void assignLokasi (String idL, String idL1){
         L.removeLokasi(idLk);
     }
     
+    //Login mahasiswa
+    public String loginMahasiswa(String Usernamel, String Passwordl) {
+        String s = "";
+        Mahasiswa m = getUsernameMhs(Usernamel);
+            if (m.getPassword().equals(Passwordl)) {
+                s = "1";
+            } else {
+                s = "2";
+            }
+        return s;
+    }
+         
+    //Login Admin
+    public String loginAdmin(String Usernamel, String Passwordl) {
+        String s = "";
+        Pembimbing p = getUsernamePmb(Usernamel);
+            if (p.getPassword().equals(Passwordl)) {
+                System.out.println("cek 2");
+                s = "1";
+            } else {
+                System.out.println("cek 3");
+                s = "2";
+            }
+        return s;
+    }
     // Tambahan
     
     public void viewListConsole(String[] list) {
@@ -330,9 +383,115 @@ public void assignLokasi (String idL, String idL1){
         return (String[]) idLo.stream().toArray(size -> new String[size]);
     }
 
+//Database Mahasiswa
+ public void loadMahasiswa() throws FileNotFoundException, IOException {
+        try {
+            daftarMahasiswa = (ArrayList<Mahasiswa>) save.getObject("FilePelanggan.dat");
+        } catch (FileNotFoundException ex) {
+            File f = new File("FilePelanggan.dat");
+            f.createNewFile();
+        } catch (EOFException ex) {
+            daftarMahasiswa = new ArrayList<>();
+        } catch (IOException | ClassNotFoundException ex) {
+            throw new IOException("error " + ex.getMessage());
+        }
+    }
+ 
+   public void saveMahasiswa() throws FileNotFoundException, IOException {
+        try {
+            save.saveObject(daftarMahasiswa, "FileMahasiswa.dat");
+        } catch (FileNotFoundException ex) {
+            throw new FileNotFoundException("file not found");
+        } catch (IOException ex) {
+            throw new IOException("error " + ex.getMessage());
+        }
+    }
+   
+ //Database Pembimbing
+  public void loadPembimbing() throws FileNotFoundException, IOException {
+        try {
+            daftarPembimbing = (ArrayList<Pembimbing>) save.getObject("FilePembimbing.dat");
+        } catch (FileNotFoundException ex) {
+            File f = new File("FilePembimbing.dat");
+            f.createNewFile();
+        } catch (EOFException ex) {
+            daftarPembimbing = new ArrayList<>();
+        } catch (IOException | ClassNotFoundException ex) {
+            throw new IOException("error " + ex.getMessage());
+        }
+    }
+    public void savePembimbing() throws FileNotFoundException, IOException {
+        try {
+            daftarPembimbing = (ArrayList<Pembimbing>) save.getObject("FilePembimbing.dat");
+        } catch (FileNotFoundException ex) {
+            File f = new File("FilePembimbing.dat");
+            f.createNewFile();
+        } catch (EOFException ex) {
+            daftarPembimbing = new ArrayList<>();
+        } catch (IOException | ClassNotFoundException ex) {
+            throw new IOException("error " + ex.getMessage());
+        }
+    }
+    
+    //Database Kelompok
+    public void loadKelompok() throws FileNotFoundException, IOException {
+        try {
+            daftarKelompok = (ArrayList<Kelompok>) save.getObject("FileKelompok.dat");
+        } catch (FileNotFoundException ex) {
+            File f = new File("FileKelompok.dat");
+            f.createNewFile();
+        } catch (EOFException ex) {
+            daftarKelompok = new ArrayList<>();
+        } catch (IOException | ClassNotFoundException ex) {
+            throw new IOException("error " + ex.getMessage());
+        }
+    } 
+     public void saveKelompok() throws FileNotFoundException, IOException {
+        try {
+            daftarKelompok = (ArrayList<Kelompok>) save.getObject("FileKelompok.dat");
+        } catch (FileNotFoundException ex) {
+            File f = new File("FileKelompok.dat");
+            f.createNewFile();
+        } catch (EOFException ex) {
+            daftarKelompok = new ArrayList<>();
+        } catch (IOException | ClassNotFoundException ex) {
+            throw new IOException("error " + ex.getMessage());
+        }
+    }
+     
+      public void loadLokasi() throws FileNotFoundException, IOException {
+        try {
+            daftarLokasi= (ArrayList<Lokasi>) save.getObject("FileLokasi.dat");
+        } catch (FileNotFoundException ex) {
+            File f = new File("FileLokasi.dat");
+            f.createNewFile();
+        } catch (EOFException ex) {
+            daftarLokasi = new ArrayList<>();
+        } catch (IOException | ClassNotFoundException ex) {
+            throw new IOException("error " + ex.getMessage());
+        }
+     
+  
+    }
+      public void saveLokasi() throws FileNotFoundException, IOException {
+        try {
+            daftarLokasi = (ArrayList<Lokasi>) save.getObject("FileLokasi.dat");
+        } catch (FileNotFoundException ex) {
+            File f = new File("FileLokasi.dat");
+            f.createNewFile();
+        } catch (EOFException ex) {
+            daftarLokasi = new ArrayList<>();
+        } catch (IOException | ClassNotFoundException ex) {
+            throw new IOException("error " + ex.getMessage());
+        }
+    }
+
+    public void createMahasiswa(String Nama, String NIM, String Email, String Telepon, String tglLahir, String Alamat, String Jurusan) {
+        throw new UnsupportedOperationException("UnsupportedOperationException"); 
+    }
+
+
 }
-
-
 
 
 
