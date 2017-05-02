@@ -4,65 +4,42 @@ public class Mahasiswa extends orang{
     private static int countE = 1;
     
     private final String idMahasiswa;
-    private String Nama;
     private String NIM;
-    
-     public Mahasiswa(String Nama, String NIM, String Email, String Telepon,String tglLahir ,String Alamat,String Jurusan) {
-        super(Nama, NIM ,Email,Telepon,tglLahir,Alamat,Jurusan);
-        idMahasiswa = "p-" + (countE++);
-        this.Nama = Nama;
+
+    public Mahasiswa(String NIM, String Nama, String Alamat, String Email, String Telepon, String tglLahir, String Jurusan, String Username, String Password) {
+        super(Nama, Alamat, Email, Telepon, tglLahir, Jurusan, Username, Password);
+        this.idMahasiswa = "p-" + (countE++);
         this.NIM = NIM;
     }
-
-    public String Mahasiswa(String NIM, String Nama, String Jurusan, String Status) {
-        return null;
-        
-    }
-      
-    public String getidMahasiswa(){
-        return idMahasiswa;
-    }  
-
     
 
-    @Override
-    public String getNama() {
-        return Nama;
-    }
-
-    @Override
-    public void setNama(String Nama) {
-        this.Nama = Nama;
-    }
-
-    @Override
-    public String getNIM() {
-        return NIM;
-    }
-
-    @Override
-    public void setNIM(String NIM) {
-        this.NIM = NIM;
-    }
     
     @Override
     public String toString(){
         return "idMahasiswa :" +idMahasiswa +"\n"+
-                "nama       :" + Nama + "\n"+
                 "NIM        :" + NIM  + "\n"+  
                 "Alamat     :" + getAlamat() +"\n"+
                 "Email      :" + getEmail() +"\n"+
                 "Telepon    :" + getTelepon() +"\n"+
-                "tglLahir   :" + gettglLahir() +"\n"+
-                "Jurusan    :" + getJurusan();
-                
-    
-                
+                "Jurusan    :" + getJurusan() +"\n"+
+                "Username   :" + getUsername()+"\n"+
+                "Password   :" + getPassword();
                 }
 
-    
+    public String getNIM() {
+        return NIM;
+    }
+
+    public void setNIM(String NIM) {
+        this.NIM = NIM;
+    }
+
      public String toStringAll() {
-        return idMahasiswa + " , " + Nama + " , " + NIM + " , " + getAlamat() + " , " + getTelepon() + " , " + gettglLahir() + " , " + getJurusan();
+        return idMahasiswa + " , " + NIM + " , " + getAlamat() + " , " + getTelepon() + " , " + getJurusan()+getUsername()+getPassword();
+    }
+
+    Object getidMahasiswa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
  
